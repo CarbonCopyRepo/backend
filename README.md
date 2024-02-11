@@ -8,6 +8,11 @@
  - Style Guides / Best Practices / Cheatsheets:
    - [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)
    - [Quick Reference for common TypeScript types](https://github.com/DefinitelyTyped/DefinitelyTyped)
+
+ - Testing:
+   - For Unit and Integration Testing we plan to use the [Jest Framework](https://jestjs.io/docs/getting-started)
+   - For Testing API endpoints, we use [Supertest](https://www.npmjs.com/package/supertest)
+   - The idea is to group the tests by their feature as denoted by the tests folder under user inside src (just an example)
  
  - Miscellaneous:
    - [Enabling ESLint on VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
