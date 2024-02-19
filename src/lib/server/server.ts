@@ -4,8 +4,8 @@
 
 import express, { Express, Request, Response } from "express";
 
-import userRouter from "@/user/routes";
-import apiRouter from "@/routes";
+import userRouter from "../../user/routes";
+import apiRouter from "../../routes";
 
 // Singleton that stores the express server instance that
 // can be used throughout the entire application
