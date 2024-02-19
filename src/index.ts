@@ -1,6 +1,7 @@
 // The main entry point of the backend part of our CarbonCopy app
+// TODO: Resolve path aliases (i.e. "@/") during docker build
 import dotenv from "dotenv";
-import { getExpressServerInstance } from "@/lib/server/server";
+import { getExpressServerInstance } from "./lib/server/server";
 
 // Load our environment variables from .env
 // file using the dotenv npm package

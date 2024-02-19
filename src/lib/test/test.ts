@@ -1,5 +1,5 @@
 import request from "supertest";
-import { getExpressServerInstance } from "@/lib/server/server";
+import { getExpressServerInstance } from "../server/server";
 
 let superTestInstance: import("supertest/lib/agent");
 

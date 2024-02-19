@@ -1,6 +1,6 @@
 // Test /users endpoint as an example
 
-import { getSuperTestInstance } from "@/lib/test/test";
+import { getSuperTestInstance } from "../../lib/test/test";
 
 const request = getSuperTestInstance();
 
