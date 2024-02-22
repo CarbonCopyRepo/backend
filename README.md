@@ -20,6 +20,9 @@
    - [Jest + Supertest examples](https://medium.com/@natnael.awel/how-to-setup-testing-for-typescript-with-express-js-example-83d3efbb6fd4)
    - [Jest Config Isolated Modules option turned on](https://kulshekhar.github.io/ts-jest/docs/getting-started/options/isolatedModules/)
 
+ - Axios:
+   - [Request Config Options](https://axios-http.com/docs/req_config)
+
 
  - Miscellaneous:
    - [Enabling ESLint on VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
