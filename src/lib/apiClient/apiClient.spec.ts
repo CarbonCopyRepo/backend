@@ -26,24 +26,34 @@ test("apiClient:createAxiosInstance returns a custom axios instance", () => {
   expect(axiosInstance.defaults).toBeDefined();
 });
 
-test("apiClient:createAxiosInstance has a baseURL property", () => {
-  expect(axiosInstance.defaults).toContainKey("baseURL");
+test("apiClient:createAxiosInstance has a baseURL property that is not null or undefined", () => {
+  expect(axiosInstance.defaults.baseURL).not.toBeNil();
 });
 
-test("apiClient:createAxiosInstance has a baseURL property that is not empty, null or undefined", () => {
-  const baseURL = axiosInstance?.defaults?.baseURL?.trim();
-
-  expect(baseURL).not.toBeUndefined();
-  expect(baseURL).not.toBeNull();
-  expect(baseURL).not.toBeEmpty();
+test("apiClient:createAxiosInstance has a baseURL property that is not empty", () => {
+  expect(axiosInstance.defaults.baseURL).not.toBeEmpty();
 });
 
-test("apiClient:createAxiosInstance has a timeout property", () => {
-  expect(axiosInstance.defaults).toContainKey("timeout");
+test("apiClient:createAxiosInstance throws an exception when baseURL is empty, null or undefined", () => {
+  const axiosConfig: AxiosConfig = {
+    baseURL: "",
+    timeout: 500,
+  };
+
+  expect(() => createAxiosInstance(axiosConfig)).toThrow(Error);
 });
 
-test("apiClient:createAxiosInstance has a timeout property and a timeout value greater than 0", () => {
+test("apiClient:createAxiosInstance has a timeout value greater than 0", () => {
   expect(axiosInstance.defaults.timeout).toBeGreaterThan(0);
+});
+
+test("apiClient:createAxiosInstance throws an exception when timeout value is equal to 0", () => {
+  const axiosConfig: AxiosConfig = {
+    baseURL: "hello",
+    timeout: 0,
+  };
+
+  expect(() => createAxiosInstance(axiosConfig)).toThrow(Error);
 });
 
 test("apiClient:createAxiosInstance has default headers when no custom headers are passed", () => {
