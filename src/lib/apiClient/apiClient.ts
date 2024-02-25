@@ -21,3 +21,9 @@ export const createAxiosInstance = ({
     responseType: responseType ? responseType : "json",
   });
 };
+
+// export const makeGetRequest = ({
+//   urlParams,
+//   queryParams,
+//   headers,
+// }: GetDeleteConfig = {}): ApiResponse => {};
