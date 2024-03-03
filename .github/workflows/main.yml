@@ -13,7 +13,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setting up Node.js
       - uses: actions/setup-node@v3
         with:
           node-version: 20.9.0
