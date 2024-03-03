@@ -1,7 +1,9 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 
-import { AxiosConfig } from "./apiClient.types";
+import { ApiResponse, AxiosConfig, GetDeleteConfig } from "./apiClient.types";
+import { buildQueryParams, buildUrlParams } from "./apiClient.utils";
 
+// TODO: Make this return only a single instance for a particular base url
 export const createAxiosInstance = ({
   baseURL,
   timeout,
@@ -22,8 +24,47 @@ export const createAxiosInstance = ({
   });
 };
 
-// export const makeGetRequest = ({
-//   urlParams,
-//   queryParams,
-//   headers,
-// }: GetDeleteConfig = {}): ApiResponse => {};
+// TODO: Add request per get request in future if needed
+export const makeGetRequest = async (
+  {
+    axiosInstance,
+    urlParams,
+    queryParams,
+  }: GetDeleteConfig = {} as GetDeleteConfig,
+): Promise<ApiResponse> => {
+  let baseURL = axiosInstance.defaults.baseURL;
+
+  // Add url params if present
+  baseURL =
+    urlParams && Object.keys(urlParams).length > 0
+      ? buildUrlParams(baseURL, urlParams)
+      : baseURL;
+
+  // Add query params if present
+  baseURL =
+    queryParams && Object.keys(queryParams).length > 0
+      ? buildQueryParams(baseURL, queryParams)
+      : baseURL;
+
+  const clientResponse: ApiResponse = { statusCode: null, data: [], error: "" };
+  let response: AxiosResponse<any, any> | null = null;
+
+  // Send request adding any request specific headers if present
+  try {
+    if (baseURL != null) {
+      response = (await axiosInstance.get(baseURL)) as AxiosResponse;
+      clientResponse.statusCode = response.status;
+      clientResponse.data = response.data;
+    }
+  } catch (error) {
+    // TODO: Have common error handling methods (interceptor ??)
+    // TODO: Handle different types of errors (400, 401, 403, 404, 408, 500)
+
+    const errorResponse = error as AxiosError;
+    clientResponse.statusCode = errorResponse.status;
+    clientResponse.data = [];
+    clientResponse.error = errorResponse.message;
+  }
+
+  return Promise.resolve(clientResponse);
+};

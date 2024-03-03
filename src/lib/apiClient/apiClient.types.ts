@@ -1,4 +1,4 @@
-import { ResponseType } from "axios";
+import { AxiosInstance, ResponseType } from "axios";
 
 export type StringObject = {
   [key: string]: string;
@@ -12,6 +12,7 @@ export type AxiosConfig = {
 };
 
 export type GetDeleteConfig = {
+  axiosInstance: AxiosInstance;
   urlParams?: StringObject;
   queryParams?: StringObject;
   headers?: StringObject;
@@ -24,7 +25,7 @@ type ResponseData =
   | Array<{ [key: string]: any }>;
 
 export type ApiResponse = {
-  statusCode: number;
+  statusCode: number | unknown;
   data: ResponseData;
   error: string;
 };

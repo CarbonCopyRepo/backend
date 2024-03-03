@@ -1,10 +1,10 @@
 import { StringObject } from "./apiClient.types";
 
 export const buildUrlParams = (
-  baseUrl: string,
+  baseUrl: string | undefined,
   urlParams: StringObject,
-): string => {
-  if (baseUrl.trim().length === 0)
+): string | undefined => {
+  if (!baseUrl || baseUrl.trim().length === 0)
     throw new Error(
       "API_Client:buildURLParams:baseURL cannot be empty or null or undefined",
     );
@@ -23,10 +23,10 @@ export const buildUrlParams = (
 };
 
 export const buildQueryParams = (
-  baseUrl: string,
+  baseUrl: string | undefined,
   queryParams: StringObject,
 ): string => {
-  if (baseUrl.trim().length === 0)
+  if (!baseUrl || baseUrl.trim().length === 0)
     throw new Error(
       "API_Client:buildQueryParams:baseURL cannot be empty or null or undefined",
     );
