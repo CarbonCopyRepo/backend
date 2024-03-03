@@ -1,0 +1,28 @@
+name: Jest Unit Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checking out the branch
+        uses: actions/checkout@v2
+      - name: Setting up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.9.0
+      - name: Installing dependencies
+        uses: npm ci
+      - name: Executing tests
+        run: npm test
+
+
