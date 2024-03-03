@@ -19,6 +19,10 @@
    - [Supertest docs](https://www.npmjs.com/package/supertest)
    - [Jest + Supertest examples](https://medium.com/@natnael.awel/how-to-setup-testing-for-typescript-with-express-js-example-83d3efbb6fd4)
    - [Jest Config Isolated Modules option turned on](https://kulshekhar.github.io/ts-jest/docs/getting-started/options/isolatedModules/)
+   - [Extended Jest Docs](https://jest-extended.jestcommunity.dev/docs/matchers/)
+
+ - Axios:
+   - [Request Config Options](https://axios-http.com/docs/req_config)
 
 
  - Miscellaneous:
