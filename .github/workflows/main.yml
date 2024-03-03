@@ -2,11 +2,9 @@ name: Jest Unit Tests
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   test:
@@ -14,8 +12,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Checking out the branch
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Setting up Node.js
         uses: actions/setup-node@v3
         with:
