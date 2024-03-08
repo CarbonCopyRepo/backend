@@ -30,7 +30,7 @@ jobs:
     env:
       IMAGE_NAME: carboncopy-backend
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-    if: github.event.name == 'push' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
