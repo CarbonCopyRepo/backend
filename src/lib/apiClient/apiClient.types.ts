@@ -5,7 +5,7 @@ export type StringObject = {
 };
 
 export type BodyObject = {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | BodyObject;
 };
 
 export type AxiosConfig = {
@@ -22,7 +22,7 @@ export type GetDeleteConfig = {
   headers?: StringObject;
 };
 
-export type PostConfig = {
+export type PostPatchPutConfig = {
   axiosInstance: AxiosInstance;
   body?: BodyObject;
   urlParams?: StringObject;

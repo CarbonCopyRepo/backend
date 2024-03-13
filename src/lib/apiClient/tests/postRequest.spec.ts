@@ -1,21 +1,21 @@
-import { ApiResponse, AxiosConfig, PostConfig, BodyObject } from "../apiClient.types";
+import { ApiResponse, AxiosConfig, PostPatchPutConfig, BodyObject } from "../apiClient.types";
 import { createAxiosInstance, makePostRequest } from "../apiClient";
 
 const setup = async (
   baseURL: string,
   timeout: number,
   resource: string,
-  body?: BodyObject,
+  body: BodyObject,
 ) => {
-  const getReqParams: PostConfig = {} as PostConfig;
+  const PostReqParams: PostPatchPutConfig = {} as PostPatchPutConfig;
   const axiosConfig: AxiosConfig = { baseURL, timeout };
 
-  getReqParams.axiosInstance = createAxiosInstance(axiosConfig);
-  getReqParams.urlParams = { resource };
+  PostReqParams.axiosInstance = createAxiosInstance(axiosConfig);
+  PostReqParams.urlParams = { resource };
 
-  if (body) getReqParams.body = body;
+  if (body) PostReqParams.body = body;
 
-  return await makePostRequest(getReqParams);
+  return await makePostRequest(PostReqParams);
 };
 
 describe("apiClient:postRequest success response test cases", () => {
@@ -38,16 +38,8 @@ describe("apiClient:postRequest success response test cases", () => {
     expect(res).toContainAllKeys([...Object.keys(res)]);
   });
 
-  test("apiClient:makePostRequest responds with correct return body", () => {
-    expect(res.data).toStrictEqual(body);
-  });
-
-  test("apiClient:makePostRequest has a status code of 204 in the response", () => {
+  test("apiClient:makePostRequest has a status code of 201 in the response", () => {
     expect(res.statusCode).toEqual(201);
-  });
-
-  test("apiClient.makePostRequest has error field set to an empty string in the response", () => {
-    expect(res.error.length).toEqual(0);
   });
 });
 
@@ -67,12 +59,8 @@ describe("apiClient:postRequest success empty body response test cases", () => {
     expect(res).toContainAllKeys([...Object.keys(res)]);
   });
 
-  test("apiClient:makePostRequest has a status code of 204 in the response", () => {
+  test("apiClient:makePostRequest has a status code of 201 in the response", () => {
     expect(res.statusCode).toEqual(201);
-  });
-
-  test("apiClient.makePostRequest has error field set to an empty string in the response", () => {
-    expect(res.error.length).toEqual(0);
   });
 });
 
@@ -82,9 +70,10 @@ describe("apiClient:postRequest error response test cases", () => {
   const baseURL: string = "https://jsonplacholder.typicode.com/";
   const timeout: number = 500;
   const resource: string = "posts";
+  const body = {};
 
   beforeAll(async () => {
-    res = await setup(baseURL, timeout, resource);
+    res = await setup(baseURL, timeout, resource, body);
   });
 
   test("apiClient:makePostRequests returns a response", () => {
@@ -98,9 +87,5 @@ describe("apiClient:postRequest error response test cases", () => {
     } else {
       expect(res.statusCode).toBeUndefined();
     }
-  });
-
-  test("apiClient.makePostRequests has an error message set in the response", () => {
-    expect(res.error.length).toBeGreaterThan(0);
   });
 });

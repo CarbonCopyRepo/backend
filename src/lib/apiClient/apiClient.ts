@@ -4,7 +4,7 @@ import {
   ApiResponse,
   AxiosConfig,
   GetDeleteConfig,
-  PostConfig,
+  PostPatchPutConfig,
 } from "./apiClient.types";
 import { buildQueryParams, buildUrlParams } from "./apiClient.utils";
 
@@ -79,7 +79,7 @@ export const makePostRequest = async ({
   body,
   urlParams,
   queryParams,
-}: PostConfig): Promise<ApiResponse> => {
+}: PostPatchPutConfig): Promise<ApiResponse> => {
   let baseURL = axiosInstance.defaults.baseURL;
 
   // Add url params if present
@@ -98,15 +98,17 @@ export const makePostRequest = async ({
   let response: AxiosResponse<any, any> | null = null;
 
   try {
-    if (baseURL != null) {
-      response = (await axiosInstance.post(
-        baseURL,
-        body ?? undefined,
-      )) as AxiosResponse;
+    if (!body) throw new Error("No POST body received")
+    if (!baseURL) throw new Error("No URL received")
+  
+    response = (await axiosInstance.post(
+      baseURL,
+      body,
+    )) as AxiosResponse;
 
-      clientResponse.statusCode = response.status;
-      clientResponse.data = response.data;
-    }
+    clientResponse.statusCode = response.status;
+    clientResponse.data = response.data;
+  
   } catch (error) {
     // TODO: Have common error handling methods (interceptor ??)
     // TODO: Handle different types of errors (400, 401, 403, 404, 408, 500)
