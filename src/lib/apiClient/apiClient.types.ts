@@ -24,7 +24,7 @@ export type GetDeleteConfig = {
 
 export type PostPatchPutConfig = {
   axiosInstance: AxiosInstance;
-  body?: BodyObject;
+  body: BodyObject;
   urlParams?: StringObject;
   queryParams?: StringObject;
   headers?: StringObject;

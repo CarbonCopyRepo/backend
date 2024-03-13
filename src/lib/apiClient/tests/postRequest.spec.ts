@@ -43,7 +43,7 @@ describe("apiClient:postRequest success response test cases", () => {
   });
 });
 
-describe("apiClient:postRequest success empty body response test cases", () => {
+describe("apiClient:postRequest empty body response returns error test cases", () => {
   let res: ApiResponse = {} as ApiResponse;
 
   const baseURL: string = "https://jsonplaceholder.typicode.com/";
@@ -59,9 +59,13 @@ describe("apiClient:postRequest success empty body response test cases", () => {
     expect(res).toContainAllKeys([...Object.keys(res)]);
   });
 
-  test("apiClient:makePostRequest has a status code of 201 in the response", () => {
-    expect(res.statusCode).toEqual(201);
+  test("apiClient:makePostRequest returns no error code because an exception occured", () => {
+    expect(res.statusCode).toBeUndefined()
   });
+
+  test("apiClient:makePostRequest returns error message", () => {
+    expect(res.error.length).toBeGreaterThan(0);
+  })
 });
 
 describe("apiClient:postRequest error response test cases", () => {
