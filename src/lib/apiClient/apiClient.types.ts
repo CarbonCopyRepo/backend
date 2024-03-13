@@ -4,6 +4,10 @@ export type StringObject = {
   [key: string]: string;
 };
 
+export type BodyObject = {
+  [key: string]: string | number | boolean;
+};
+
 export type AxiosConfig = {
   baseURL: string;
   timeout: number;
@@ -13,6 +17,14 @@ export type AxiosConfig = {
 
 export type GetDeleteConfig = {
   axiosInstance: AxiosInstance;
+  urlParams?: StringObject;
+  queryParams?: StringObject;
+  headers?: StringObject;
+};
+
+export type PostConfig = {
+  axiosInstance: AxiosInstance;
+  body?: BodyObject;
   urlParams?: StringObject;
   queryParams?: StringObject;
   headers?: StringObject;
