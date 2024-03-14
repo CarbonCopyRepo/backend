@@ -1,15 +1,15 @@
 import { makePostRequest } from "../../lib/apiClient/apiClient";
 import { AxiosInstance } from "axios";
 import { PostPatchPutConfig } from "../../lib/apiClient/apiClient.types";
-import { HTTPBody } from "./storageBucket.types";
+import { HTTPBody } from "./storage.types";
 
-export const uploadHTTPResponseToStorageBucket = async (
-  HTTPbody: HTTPBody,
+export const uploadHTTPResponseToStorage = async (
+  HTTPBody: HTTPBody,
   axiosInstance: AxiosInstance,
 ) => {
   const postConfig: PostPatchPutConfig = {
     axiosInstance,
-    body: HTTPbody,
+    body: HTTPBody,
   };
 
   return await makePostRequest(postConfig);
