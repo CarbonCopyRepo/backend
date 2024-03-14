@@ -1,13 +1,10 @@
 import { makePostRequest } from "../../lib/apiClient/apiClient";
 import { AxiosInstance } from "axios";
-import {
-  PostPatchPutConfig,
-  BodyObject,
-} from "../../lib/apiClient/apiClient.types";
+import { PostPatchPutConfig } from "../../lib/apiClient/apiClient.types";
+import { HTTPBody } from "./storageBucket.types";
 
-// TODO add typing for what we get from API calls object
 export const uploadHTTPResponseToStorageBucket = async (
-  HTTPbody: BodyObject,
+  HTTPbody: HTTPBody,
   axiosInstance: AxiosInstance,
 ) => {
   const postConfig: PostPatchPutConfig = {

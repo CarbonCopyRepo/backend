@@ -6,7 +6,7 @@ import express, { Express, Request, Response } from "express";
 
 import userRouter from "../../user/routes";
 import apiRouter from "../../routes";
-import bucketStorageRouter from "../../bucketStorage/routes"
+import storageBucketRouter from "../../storageBucket/routes";
 
 // Singleton that stores the express server instance that
 // can be used throughout the entire application
@@ -18,7 +18,7 @@ export const getExpressServerInstance = (): Express => {
 
     // Initialize the individual routers as per component
     apiRouter.use("/users", userRouter);
-    apiRouter.use("/storageBucket", bucketStorageRouter)
+    apiRouter.use("/storageBucket", storageBucketRouter);
 
     // Make all routes available under the root /api prefix
     app.use("/api", apiRouter);
