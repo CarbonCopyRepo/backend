@@ -1,33 +1,29 @@
-import { Router, Request, Response } from "express";
-import { createAxiosInstance, makePostRequest } from '../lib/apiClient/apiClient'
-import { AxiosConfig, PostPatchPutConfig, StringObject } from '../lib/apiClient/apiClient.types'
-require('dotenv').config()
+import { Request, Response, Router } from "express";
+import { createAxiosInstance } from "../lib/apiClient/apiClient";
+import { AxiosConfig } from "../lib/apiClient/apiClient.types";
+import { uploadHTTPResponseToStorageBucket } from "./domain/uploadResponseToStorageBucket";
 
 const bucketStorageRouter = Router();
 
-bucketStorageRouter.get("/", (req: Request, res: Response) => {
-    res.status(200).json()
-})
+// Setup Axios Instance
+const axiosConfig: AxiosConfig = {
+  baseURL: `https://storage.googleapis.com/storage/v1/b/${process.env.BUCKET_NAME}/o`,
+  timeout: 500,
+  headers: {
+    Authorization: `Bearer ${process.env.OAUTH2_TOKEN}`,
+  },
+  responseType: "json",
+};
 
-bucketStorageRouter.post("/", (req: Request, res: Response) => {
-    const axiosConfig: AxiosConfig = {
-        baseURL : req.baseUrl,
-        timeout: 500,
-        headers: {
-            Authorization: `Bearer ${process.env.OAUTH2_TOKEN}`
-        },
-        responseType: 'json'
-    }
-    const axios = createAxiosInstance(axiosConfig)
+const axiosInstance = createAxiosInstance(axiosConfig);
 
-    const postConfig: PostPatchPutConfig = {
-        axiosInstance: axios,
-        body: req.body,
-        headers: req.headers as StringObject
-    }
+bucketStorageRouter.post("/", async (req: Request, res: Response) => {
+  const response = await uploadHTTPResponseToStorageBucket(
+    req.body,
+    axiosInstance,
+  );
 
-    const response = makePostRequest(postConfig)
-    res.status(201).json(response);
+  res.json(response);
 });
 
 export default bucketStorageRouter;
