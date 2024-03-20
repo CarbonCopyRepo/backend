@@ -3,7 +3,7 @@ name: CarbonCopy Node.js Backend - Build Docker Image and upload to GCR
 on:
   workflow_run:
     workflows:
-      - "Run Jest Unit Tests"
+      - "CarbonCopy Node.js Backend - Run Jest Unit Tests"
     types:
       - completed
 
