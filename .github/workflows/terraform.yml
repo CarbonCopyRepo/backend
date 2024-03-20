@@ -3,7 +3,7 @@ name: CarbonCopy Node.js Backend - Deploy to Google Kubernetes Engine
 on:
   workflow_run:
     workflows:
-      - "CarbonCopy Node.js Backend - Build Docker Image and upload to GCR"
+      - Build Docker Image and upload to GCR
     types:
       - completed
 

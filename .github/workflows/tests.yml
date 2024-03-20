@@ -1,4 +1,4 @@
-name: CarbonCopy Node.js Backend - Run Jest Unit Tests
+name: Run Jest Unit Tests
 
 on:
   push:
