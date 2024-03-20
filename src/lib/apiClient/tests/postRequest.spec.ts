@@ -1,4 +1,9 @@
-import { ApiResponse, AxiosConfig, PostPatchPutConfig, BodyObject } from "../apiClient.types";
+import {
+  ApiResponse,
+  AxiosConfig,
+  PostPatchPutConfig,
+  BodyObject,
+} from "../apiClient.types";
 import { createAxiosInstance, makePostRequest } from "../apiClient";
 
 const setup = async (
@@ -60,12 +65,12 @@ describe("apiClient:postRequest empty body response returns error test cases", (
   });
 
   test("apiClient:makePostRequest returns no error code because an exception occured", () => {
-    expect(res.statusCode).toBeUndefined()
+    expect(res.statusCode).toBeUndefined();
   });
 
   test("apiClient:makePostRequest returns error message", () => {
     expect(res.error.length).toBeGreaterThan(0);
-  })
+  });
 });
 
 describe("apiClient:postRequest error response test cases", () => {

@@ -98,17 +98,14 @@ export const makePostRequest = async ({
   let response: AxiosResponse<any, any> | null = null;
 
   try {
-    if (!body || Object.keys(body).length === 0) throw new Error("No POST body received")
-    if (!baseURL) throw new Error("No URL received")
-  
-    response = (await axiosInstance.post(
-      baseURL,
-      body,
-    )) as AxiosResponse;
+    if (!body || Object.keys(body).length === 0)
+      throw new Error("No POST body received");
+    if (!baseURL) throw new Error("No URL received");
+
+    response = (await axiosInstance.post(baseURL, body)) as AxiosResponse;
 
     clientResponse.statusCode = response.status;
     clientResponse.data = response.data;
-  
   } catch (error) {
     // TODO: Have common error handling methods (interceptor ??)
     // TODO: Handle different types of errors (400, 401, 403, 404, 408, 500)
