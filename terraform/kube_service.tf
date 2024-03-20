@@ -1,6 +1,8 @@
+# This file exposes the backend as a service to
+# be accessible to the outside world
 resource "kubernetes_service" "cc-backend" {
   metadata {
-    name = "cc-backend-service"
+    name = "cc-backend"
   }
 
   spec {
@@ -8,8 +10,7 @@ resource "kubernetes_service" "cc-backend" {
       App = "cc-backend"
     }
 
-    # INFO: For sticky sessions, if app is stateless can be removed
-    session_affinity = "ClientIP"
+    type = "LoadBalancer"
 
     port {
       port = 3000 # External traffic comes in on this port

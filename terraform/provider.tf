@@ -4,12 +4,14 @@ variable "project_id" {}
 variable "artifact_registry" {}
 variable "image_name" {}
 variable "tag" {}
+variable "gcp_terraform_sa" {}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs
 # Configure a cloud provider that terraform will use (in our case GCP)
 provider "google" {
   project = var.project_id
   region  = "us-west1"
+  credentials = var.gcp_terraform_sa
 }
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket

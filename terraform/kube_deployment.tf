@@ -1,20 +1,19 @@
-# Create a kubernetes deployment
+# This file specifies what should be run on the GKE
+# cluster - the docker image, the # of replicas etc.
 resource "kubernetes_deployment" "cc-backend" {
   metadata {
     name = "cc-backend-deploy"
   }
 
   spec {
-    replicas = 3
+    replicas = 1
 
-    # Which pods should be matched
     selector {
       match_labels = {
         App = "cc-backend"
       }
     }
 
-    # Labels to apply to the pods
     template {
       metadata {
         labels = {
@@ -22,7 +21,6 @@ resource "kubernetes_deployment" "cc-backend" {
         }
       }
 
-      # gcr.io/${{ secrets.GCP_PROJECT_ID }}/$IMAGE_NAME
       spec {
         container {
           image = "${var.artifact_registry}/${var.project_id}/${var.image_name}:${var.tag}"
