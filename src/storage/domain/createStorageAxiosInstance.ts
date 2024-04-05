@@ -10,6 +10,6 @@ export const createStorageAxiosInstance = () => {
     },
     responseType: "json",
   };
-  
+
   return createAxiosInstance(axiosConfig);
-}
+};

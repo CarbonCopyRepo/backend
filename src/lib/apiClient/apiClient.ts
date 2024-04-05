@@ -98,14 +98,11 @@ export const makePostRequest = async ({
   let response: AxiosResponse<any, any> | null = null;
 
   try {
-<<<<<<< HEAD
     if (!body || Object.keys(body).length === 0) {
       throw new Error("makePostRequest: No POST body received");
     }
-=======
     if (!body || Object.keys(body).length === 0)
       throw new Error("No POST body received");
->>>>>>> main
     if (!baseURL) throw new Error("No URL received");
 
     response = (await axiosInstance.post(baseURL, body)) as AxiosResponse;
