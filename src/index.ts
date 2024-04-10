@@ -11,7 +11,7 @@ dotenv.config();
 const app = getExpressServerInstance();
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
 

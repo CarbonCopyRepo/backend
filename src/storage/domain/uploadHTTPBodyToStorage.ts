@@ -9,6 +9,7 @@ export const uploadHTTPResponseToStorage = async (HTTPBody: HTTPBody) => {
       keyFilename: "googleAuthKey.json",
     });
     const bucketName = process.env.BUCKET_NAME;
+    // Create 9-digit randpom number to avoid conflicts
     const fileName = `./${Math.random().toString().slice(2, 11)}_requestBody.txt`;
 
     if (HTTPBody) {
@@ -21,10 +22,12 @@ export const uploadHTTPResponseToStorage = async (HTTPBody: HTTPBody) => {
     if (bucketName) {
       googleBucketResponse = await storage.bucket(bucketName).upload(fileName);
     } else {
+      fs.unlinkSync(fileName);
       throw new Error(
         "UploadHTTPResponseToStorage: No bucket name in environment variable",
       );
     }
+    // Delete state file after upload
     fs.unlinkSync(fileName);
 
     return googleBucketResponse;
