@@ -16,6 +16,9 @@ export const getExpressServerInstance = (): Express => {
   if (!app) {
     app = express();
 
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+
     // Initialize the individual routers as per component
     apiRouter.use("/users", userRouter);
     apiRouter.use("/storage", storageRouter);
