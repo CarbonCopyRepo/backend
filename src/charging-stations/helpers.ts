@@ -1,28 +1,26 @@
 import { GEOCODE_CONFIG } from "../lib/constants";
 
-export const geoCodeAddress = (address: string) => {
-  // Basic validation
-  if (!address || address.trim().length === 0) {
-    throw new Error("Invalid address specified");
-  }
-
+export const geoCodeEndPoint = (address: string) => {
   let errorMessage: string | null = null;
-  let encodedAddress: string | null = null;
   let response: string | null = null;
 
-  // Encode the address to a URI string as the geocoding API expects it
+  // Basic validation
   try {
-    encodedAddress = encodeURIComponent(address);
+    const decodedAddr = decodeURIComponent(address);
+
+    if (decodedAddr.length === 0) {
+      errorMessage = "Invalid address specified";
+    }
   } catch (error) {
     if (error instanceof URIError) {
-      errorMessage = "Exception occurred while encoding address";
+      errorMessage = "Address is not encoded properly";
     } else {
-      errorMessage = "Unexpected error occurred while encoding address";
+      errorMessage = "Unexpected error occurred while decoding address";
     }
   }
 
   // Construct the geocode api request
-  if (encodedAddress && !errorMessage) {
+  if (!errorMessage) {
     response = getGeoCodeRequestUrl();
   }
 
@@ -32,7 +30,7 @@ export const geoCodeAddress = (address: string) => {
   };
 };
 
-export const getGeoCodeRequestUrl = () => {
+const getGeoCodeRequestUrl = () => {
   const { BASE_URL, ENDPOINT } = GEOCODE_CONFIG;
   return `${BASE_URL}${ENDPOINT}`;
 };
