@@ -49,7 +49,6 @@ jobs:
       - name: Configure Docker Client
         run: |-
           gcloud auth configure-docker --quiet
-
       - name: Build the docker image
         run: docker build . -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/$IMAGE_NAME
 
@@ -70,9 +69,9 @@ jobs:
 
       - uses: google-github-actions/setup-gcloud@v2
         with:
-          service_account_key: ${{ secrets.GCP_TERRAFORM_SA }}
-          project_id: ${{ env.PROJECT_ID }}
-          export_default_credentials: true
+           service_account_key: ${{ secrets.GCP_TERRAFORM_SA }}
+           project_id: ${{ env.PROJECT_ID }}
+           export_default_credentials: true
 
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v2
