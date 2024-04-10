@@ -2,7 +2,7 @@ import { HTTPBody } from "./storage.types";
 import { Storage, type UploadResponse } from "@google-cloud/storage";
 import fs from "fs";
 
-export const uploadHTTPResponseToStorage = async (HTTPBody: HTTPBody) => {
+export const uploadHTTPBodyToStorage = async (HTTPBody: HTTPBody) => {
   try {
     const storage = new Storage({
       projectId: process.env.PROJECT_ID,
