@@ -1,6 +1,9 @@
-import { GEOCODE_CONFIG } from "../lib/constants";
+import axios from "axios";
 
-export const geoCodeEndPoint = (address: string) => {
+import { GEOCODE_CONFIG } from "../lib/constants";
+import { BodyObject } from "../lib/apiClient/apiClient.types";
+
+export const getGeoCodeEndPoint = (address: string) => {
   let errorMessage: string | null = null;
   let response: string | null = null;
 
@@ -27,6 +30,42 @@ export const geoCodeEndPoint = (address: string) => {
   return {
     baseUrl: response,
     error: errorMessage,
+  };
+};
+
+export const getLatLongForAddress = async (
+  baseUrl: string,
+  address: string,
+) => {
+  let data: BodyObject[] = [];
+  let errorMsg: string | null = null;
+
+  const coords: BodyObject = { lat: Infinity, lon: Infinity };
+
+  try {
+    const response = await axios.get(baseUrl, {
+      params: {
+        text: address,
+        apiKey: process.env.GEOCODE_API_KEY,
+      },
+    });
+
+    data = (response?.data?.features as []) || [];
+
+    if (data.length > 0 && data[0].properties) {
+      const properties = data[0].properties as BodyObject;
+
+      coords.lat = properties.lat;
+      coords.lon = properties.lon;
+    }
+  } catch (error) {
+    errorMsg = `Unexpected error occurred while geocoding ${address}: ${error}`;
+    console.log(errorMsg);
+  }
+
+  return {
+    data: [{ ...coords }],
+    error: errorMsg,
   };
 };
 
