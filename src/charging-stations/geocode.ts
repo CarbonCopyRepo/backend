@@ -37,10 +37,10 @@ export const getLatLongForAddress = async (
   baseUrl: string,
   address: string,
 ) => {
-  let data: BodyObject[] = [];
+  let data = [];
   let errorMsg: string | null = null;
 
-  const coords: BodyObject = { lat: Infinity, lon: Infinity };
+  const coords = { lat: Infinity, lon: Infinity };
 
   try {
     const response = await axios.get(baseUrl, {
@@ -52,11 +52,13 @@ export const getLatLongForAddress = async (
 
     data = (response?.data?.features as []) || [];
 
+    // @ts-ignore
     if (data.length > 0 && data[0].properties) {
+      // @ts-ignore
       const properties = data[0].properties as BodyObject;
 
-      coords.lat = properties.lat;
-      coords.lon = properties.lon;
+      coords.lat = properties.lat as number;
+      coords.lon = properties.lon as number;
     }
   } catch (error) {
     errorMsg = `Unexpected error occurred while geocoding ${address}: ${error}`;

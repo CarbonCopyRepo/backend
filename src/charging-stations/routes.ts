@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 
-import { getGeoCodeEndPoint, getLatLongForAddress } from "./helpers";
+import { getGeoCodeEndPoint, getLatLongForAddress } from "./geocode";
+import { getChargingStationsForLatLong } from "./stations";
 
 //INFO: cs is short form for charging station
 //TODO: Handle scenario when address is a long empty string
@@ -27,16 +28,24 @@ csRouter.get("/list", async (req: Request, res: Response) => {
   }
 
   // Perform the geocoding given an input address
-  const { data: latLongs, error } = await getLatLongForAddress(
+  const { data: coords, error: latLongError } = await getLatLongForAddress(
     baseUrl,
     address as string,
   );
 
-  if (error) {
-    res.status(500).json({ data: [], error });
+  if (latLongError) {
+    res.status(500).json({ data: [], error: latLongError });
   }
 
-  res.status(200).json({ data: [...latLongs], error });
+  // Get the list of charging stations for the (lat, long) pair
+  const { data: stations, error: stationsError } =
+    await getChargingStationsForLatLong(coords[0].lat, coords[0].lon);
+
+  if (stationsError) {
+    res.status(500).json({ data: [], error: stationsError });
+  }
+
+  res.status(200).json({ data: stations, error: "" });
 });
 
 export default csRouter;
