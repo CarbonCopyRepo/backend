@@ -3,6 +3,12 @@ export const GEOCODE_CONFIG = {
   ENDPOINT: "/geocode/search",
 };
 
+export const GEOCODING_ERROR_TYPES = {
+  ADDRESS_NOT_FOUND: "ADDRESS_NOT_FOUND",
+  ENDPOINT_ERROR: "GEOCODE_ENDPOINT_ERROR",
+  API_ERROR: "API_ERROR",
+};
+
 /**
  *
  * CATEGORIES: We want to show EV Charging Stations and EV Battery Swap Stations

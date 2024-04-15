@@ -1,7 +1,8 @@
 import { Router, Request, Response } from "express";
 
-import { getGeoCodeEndPoint, getLatLongForAddress } from "./geocode";
+import { geoCodeAddress } from "./geocode";
 import { getChargingStationsForLatLong } from "./stations";
+import { GEOCODING_ERROR_TYPES } from "../lib/constants";
 
 //INFO: cs is short form for charging station
 //TODO: Handle scenario when address is a long empty string
@@ -9,43 +10,46 @@ const csRouter = Router();
 
 csRouter.get("/list", async (req: Request, res: Response) => {
   const address = req?.query?.location || null;
-  let errorMsg: string | null = null;
+  const { data: coords, error } = await geoCodeAddress(address as string);
 
-  // If address is not passed as a query parameter in the GET request
-  if (!address) {
-    errorMsg = "Address not found in query parameters";
-    return res.status(400).json({ data: [], error: errorMsg });
-  }
+  // If an error was encountered while geocoding the address
+  if (error.type != "") {
+    const { type, message } = error;
 
-  // Get the endpoint to invoke the geocode API
-  const { baseUrl, error: geoCodingError } = getGeoCodeEndPoint(
-    address as string,
-  );
-
-  // If there are errors in obtaining the endpoint to the geocode API
-  if (geoCodingError || !baseUrl) {
-    return res.status(400).json({ data: [], error: geoCodingError });
-  }
-
-  // Perform the geocoding given an input address
-  const { data: coords, error: latLongError } = await getLatLongForAddress(
-    baseUrl,
-    address as string,
-  );
-
-  if (latLongError) {
-    res.status(500).json({ data: [], error: latLongError });
+    if (type === GEOCODING_ERROR_TYPES.ADDRESS_NOT_FOUND) {
+      return res.status(400).json({ data: [], error: message });
+    } else {
+      return res.status(500).json({ data: [], error: message });
+    }
   }
 
   // Get the list of charging stations for the (lat, long) pair
   const { data: stations, error: stationsError } =
-    await getChargingStationsForLatLong(coords[0].lat, coords[0].lon);
+    await getChargingStationsForLatLong(coords[0]["lat"], coords[0]["lon"]);
 
   if (stationsError) {
     res.status(500).json({ data: [], error: stationsError });
   }
 
   res.status(200).json({ data: stations, error: "" });
+});
+
+csRouter.get("/geocode", async (req: Request, res: Response) => {
+  const address = req?.query?.location || null;
+  const { data: coords, error } = await geoCodeAddress(address as string);
+
+  // If an error was encountered while geocoding the address
+  if (error.type != "") {
+    const { type, message } = error;
+
+    if (type === GEOCODING_ERROR_TYPES.ADDRESS_NOT_FOUND) {
+      return res.status(400).json({ data: [], error: message });
+    } else {
+      return res.status(500).json({ data: [], error: message });
+    }
+  }
+
+  return res.status(200).json({ data: coords, error: "" });
 });
 
 export default csRouter;

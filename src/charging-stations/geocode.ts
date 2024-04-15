@@ -1,9 +1,50 @@
 import axios from "axios";
 
-import { GEOCODE_CONFIG } from "../lib/constants";
+import { GEOCODE_CONFIG, GEOCODING_ERROR_TYPES } from "../lib/constants";
 import { BodyObject } from "../lib/apiClient/apiClient.types";
 
-export const getGeoCodeEndPoint = (address: string) => {
+export const geoCodeAddress = async (address: string) => {
+  const error: BodyObject = { type: "", message: "" };
+  const response = { data: [], error };
+
+  // If address is not passed as a query parameter in the GET request
+  if (!address) {
+    error.type = GEOCODING_ERROR_TYPES.ADDRESS_NOT_FOUND;
+    error.message = "Address not found in query parameters";
+    return response;
+  }
+
+  // Get the endpoint to invoke the geocode API
+  const { baseUrl, error: geoCodingError } = getGeoCodeEndPoint(
+    address as string,
+  );
+
+  // If there are errors in obtaining the endpoint to the geocode API
+  if (geoCodingError || !baseUrl) {
+    error.type = GEOCODING_ERROR_TYPES.ENDPOINT_ERROR;
+    error.message = geoCodingError as string;
+
+    return response;
+  }
+
+  // Perform the geocoding given an input address
+  const { data: coords, error: latLongError } = await getLatLongForAddress(
+    baseUrl,
+    address as string,
+  );
+
+  if (latLongError) {
+    error.type = GEOCODING_ERROR_TYPES.API_ERROR;
+    error.message = latLongError as string;
+    return response;
+  }
+
+  // @ts-ignore
+  response.data = coords;
+  return response;
+};
+
+const getGeoCodeEndPoint = (address: string) => {
   let errorMessage: string | null = null;
   let response: string | null = null;
 
@@ -33,10 +74,7 @@ export const getGeoCodeEndPoint = (address: string) => {
   };
 };
 
-export const getLatLongForAddress = async (
-  baseUrl: string,
-  address: string,
-) => {
+const getLatLongForAddress = async (baseUrl: string, address: string) => {
   let data = [];
   let errorMsg: string | null = null;
 
