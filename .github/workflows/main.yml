@@ -30,6 +30,8 @@ jobs:
     env:
       IMAGE_NAME: carboncopy-backend
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GEOCODE_API_KEY: ${{ secrets.GEOCODE_API_KEY }}
+      HERE_API_KEY: ${{ secrets.HERE_API_KEY }}
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
@@ -51,7 +53,7 @@ jobs:
           gcloud auth configure-docker --quiet
 
       - name: Build the docker image
-        run: docker build . -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/$IMAGE_NAME
+        run: docker build --build-arg GEOCODE_API_KEY=${{ secrets.GEOCODE_API_KEY }} --build-arg HERE_API_KEY=${{ secrets.HERE_API_KEY }} . -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/$IMAGE_NAME
 
       - name: Push the docker image to Container Registry (GCR)
         run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/$IMAGE_NAME:latest
@@ -63,6 +65,8 @@ jobs:
     timeout-minutes: 40
     env:
       TF_VAR_gcp_terraform_sa: ${{ secrets.GCP_TERRAFORM_SA }}
+      TF_VAR_geocode_api_key: ${{ secrets.GEOCODE_API_KEY }}
+      TF_VAR_here_api_key: ${{ secrets.HERE_API_KEY }}
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout

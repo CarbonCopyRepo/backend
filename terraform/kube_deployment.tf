@@ -26,6 +26,16 @@ resource "kubernetes_deployment" "cc-backend" {
           image = "${var.artifact_registry}/${var.project_id}/${var.image_name}:${var.tag}"
           name  = "cc-backend"
 
+          env {
+            name = "GEOCODE_API_KEY"
+            value = var.geocode_api_key
+          }
+
+          env {
+            name = "HERE_API_KEY"
+            value = var.here_api_key
+          }
+
           port {
             container_port = 3000
           }
