@@ -5,6 +5,8 @@ variable "artifact_registry" {}
 variable "image_name" {}
 variable "tag" {}
 variable "gcp_terraform_sa" {}
+variable "geocode_api_key" {}
+variable "here_api_key" {}
 
 # https://registry.terraform.io/providers/hashicorp/google/latest/docs
 # Configure a cloud provider that terraform will use (in our case GCP)
