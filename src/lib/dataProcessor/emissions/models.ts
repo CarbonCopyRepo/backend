@@ -1,18 +1,17 @@
-// eslint-disable-next-line no-unused-vars
-interface GasolineEmissionsInput {
-  "Model year": number;
-  Make: string;
-  Model: string;
+export interface GasolineEmissions {
+  year: number;
+  make: string;
+  model: string;
   "Vehicle class": string;
   "Engine size (L)": number;
   Cylinders: number;
   Transmission: string;
-  "Fuel type": string;
+  vehicle_type: string;
   "City (L/100 km)": number;
   "Highway (L/100 km)": number;
   "Combined (L/100 km)": number;
-  "Combined (mpg)": number;
-  "CO2 emissions (g/km)": number;
+  miles_per_gallon: number;
+  emissions_per_km: number;
   "CO2 rating": number;
   "Smog rating": number;
 }
@@ -40,8 +39,7 @@ interface EVEmissionsInput {
 }
 
 // Can be updated as needed
-// eslint-disable-next-line no-unused-vars
-const fieldMappings = {
+export const fieldMappings = {
   "Model year": "year",
   Make: "make",
   Model: "model",

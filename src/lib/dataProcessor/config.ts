@@ -1,6 +1,12 @@
-import { ParseConfig } from "papaparse";
+import { ParseConfig, parse } from "papaparse";
 
-// eslint-disable-next-line no-unused-vars
+import { promisify } from "util";
+import * as fs from "fs";
+
+import { StringObject } from "../apiClient/apiClient.types";
+
+const readFile = promisify(fs.readFile);
+
 // Config options for the parser library - papaparse
 export const papaParseConfig: ParseConfig = {
   delimiter: ",",
@@ -8,10 +14,29 @@ export const papaParseConfig: ParseConfig = {
   dynamicTyping: true,
 };
 
-export const csvDirs = {
+export const csvDirs: StringObject = {
   EMISSIONS: "emissions",
   GASOLINE: "gasoline",
   EV: "ev",
 };
 
-export const parseCSV = () => {};
+export const parseCSV = async (
+  dirPath: string,
+  fileName: string,
+  mappings?: StringObject,
+) => {
+  const fullPath = `${dirPath}/${fileName}`;
+  const csvString = await readFile(fullPath, "utf-8");
+
+  return new Promise((resolve, reject) => {
+    parse(csvString, {
+      ...papaParseConfig,
+      transformHeader: (header: string) =>
+        mappings ? mappings[header] || header : header,
+      complete: (results) => {
+        if (results.errors.length) reject(results.errors);
+        resolve(results.data);
+      },
+    });
+  });
+};
