@@ -11,7 +11,7 @@ export const GEOCODING_ERROR_TYPES = {
 
 /**
  *
- * CATEGORIES: We want to show EV Charging Stations and EV Battery Swap Stations
+ * CATEGORIES: We want to show ev Charging Stations and ev Battery Swap Stations
  * The category codes for these are 700-7600-0322 and 700-7600-0325 respectively
  * Docs: https://www.here.com/docs/bundle/geocoding-and-search-api-developer-guide/page/topics-places/places-category-system-full.html
  *
