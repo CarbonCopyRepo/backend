@@ -5,7 +5,7 @@
 import { getDirPath, getFileNamesUnderDir } from "./utils";
 import { csvDirs, parseCSV } from "../config";
 import { fieldMappings, GasolineEmissions } from "./models";
-import { processGasolineRecords } from "./formatter";
+import { processGasolineRecords } from "./gasoline";
 
 const processGasolineData = async () => {
   const gasEmissionsData: GasolineEmissions[] = [];
