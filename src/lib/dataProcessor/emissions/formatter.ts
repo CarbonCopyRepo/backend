@@ -1,3 +1,6 @@
+import { EVEmissions, GasolineEmissions } from "./models";
+import { NUMBERS } from "../../constants";
+
 export const getUniqueYearModelMakes = (records: any[]) => {
   const items: Set<String> = new Set();
 
@@ -13,4 +16,12 @@ export const getUniqueYearModelMakes = (records: any[]) => {
   }
 
   return uniqueRecords;
+};
+
+export const convertToGramsPerMile = (
+  record: GasolineEmissions | EVEmissions,
+) => {
+  const emissionPerMile = record.emissions_per_km / NUMBERS.MILES_TO_KM;
+
+  return Math.round(emissionPerMile);
 };

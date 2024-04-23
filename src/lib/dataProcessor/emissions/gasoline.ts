@@ -1,6 +1,9 @@
-import { getUniqueYearModelMakes } from "./formatter";
-import { GasolineEmissions } from "./models";
+import { fieldMappings, GasolineEmissions } from "./models";
 import { NUMBERS } from "../../constants";
+import { csvDirs, parseCSV } from "../config";
+
+import { getUniqueYearModelMakes } from "./formatter";
+import { getDirPath, getFileNamesUnderDir } from "./utils";
 
 const formatGasolineEmissions = (
   records: GasolineEmissions[],
@@ -28,7 +31,7 @@ const formatGasolineEmissions = (
   }) as GasolineEmissions[];
 };
 
-export const processGasolineRecords = (records: GasolineEmissions[]) => {
+const processGasolineRecords = (records: GasolineEmissions[]) => {
   // Extract only the required fields
   const mappedRecords = formatGasolineEmissions(records);
 
@@ -50,3 +53,58 @@ export const processGasolineRecords = (records: GasolineEmissions[]) => {
     };
   }) as GasolineEmissions[];
 };
+
+export const processGasolineData = async () => {
+  const gasEmissionsData: GasolineEmissions[] = [];
+
+  try {
+    const dirPath = getDirPath(csvDirs.EMISSIONS, csvDirs.GASOLINE);
+    const fileNames = getFileNamesUnderDir(dirPath);
+
+    for (const fileName of fileNames) {
+      console.log("------------------------------");
+      console.log(`Processing file: ${fileName}`);
+
+      const records = (await parseCSV(
+        dirPath,
+        fileName,
+        fieldMappings,
+      )) as GasolineEmissions[];
+
+      let filteredRecords: GasolineEmissions[] = [];
+
+      if (fileName === "05_14.csv") {
+        filteredRecords = records.filter((record) => record.year >= 2012);
+      }
+
+      const dataRecords =
+        filteredRecords.length > 0 ? filteredRecords : records;
+
+      const processedRecords = processGasolineRecords(dataRecords);
+
+      gasEmissionsData.push(...processedRecords);
+    }
+  } catch (error) {
+    const baseMsg: string = `Exception while processing gasoline data: `;
+
+    const errorMsg =
+      error instanceof Error
+        ? `${baseMsg}${error.message}`
+        : `${baseMsg}${error}`;
+
+    console.log(errorMsg);
+  }
+
+  return gasEmissionsData;
+};
+
+// Example invocation
+// TODO: To be called by sql file to insert into db
+processGasolineData()
+  // eslint-disable-next-line no-unused-vars
+  .then((records) => {
+    console.log("Do something with the records");
+  })
+  .catch((error) => {
+    console.log(`Error occurred while processing gasoline data: ${error}`);
+  });

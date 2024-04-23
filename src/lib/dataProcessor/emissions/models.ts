@@ -18,22 +18,23 @@ export interface GasolineEmissions {
 }
 
 // eslint-disable-next-line no-unused-vars
-interface EVEmissionsInput {
-  "Model year": number;
-  Make: string;
-  Model: string;
+export interface EVEmissions {
+  year: number;
+  make: string;
+  model: string;
   "Vehicle class": string;
   "Motor (kW)": number;
   Transmission: string;
-  "Fuel type": string;
+  vehicle_type: string;
   "City (kWh/100 km)": number;
   "Highway (kWh/100 km)": number;
-  "Combined (kWh/100 km)": number;
+  kwh_per_100_km: number;
   "City (Le/100 km)": number;
   "Highway (Le/100 km)": number;
   "Combined (Le/100 km)": number;
   "Range (km)": number;
-  "CO2 emissions (g/km)": number;
+  emissions_per_km: number;
+  emissions_per_mile?: number;
   "CO2 rating": number;
   "Smog rating": number;
   "Recharge time (h)": number;

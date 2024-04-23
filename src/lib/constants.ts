@@ -27,4 +27,5 @@ export const HERE_API_CONFIG = {
 
 export const NUMBERS = {
   MILES_TO_KM: 1.60934,
+  AVG_CO2_EMISSIONS_IN_GRAMS_PER_KWH: 527,
 };
