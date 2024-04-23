@@ -34,6 +34,7 @@ export const parseCSV = async (
       transformHeader: (header: string) =>
         mappings ? mappings[header] || header : header,
       complete: (results) => {
+        console.log(`Total Records present in CSV ${results.data.length}`);
         if (results.errors.length) reject(results.errors);
         resolve(results.data);
       },

@@ -24,3 +24,7 @@ export const HERE_API_CONFIG = {
   CATEGORIES: ["700-7600-0322", "700-7600-0325"],
   LIMIT: 20,
 };
+
+export const NUMBERS = {
+  MILES_TO_KM: 1.60934,
+};

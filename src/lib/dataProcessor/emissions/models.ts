@@ -12,6 +12,7 @@ export interface GasolineEmissions {
   "Combined (L/100 km)": number;
   miles_per_gallon: number;
   emissions_per_km: number;
+  emissions_per_mile?: number;
   "CO2 rating": number;
   "Smog rating": number;
 }

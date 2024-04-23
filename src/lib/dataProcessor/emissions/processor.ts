@@ -5,17 +5,19 @@
 import { getDirPath, getFileNamesUnderDir } from "./utils";
 import { csvDirs, parseCSV } from "../config";
 import { fieldMappings, GasolineEmissions } from "./models";
-import { formatGasolineEmissions, getUniqueYearModelMakes } from "./formatter";
+import { processGasolineRecords } from "./formatter";
 
 const processGasolineData = async () => {
+  const gasEmissionsData: GasolineEmissions[] = [];
+
   try {
     const dirPath = getDirPath(csvDirs.EMISSIONS, csvDirs.GASOLINE);
-    let fileNames = getFileNamesUnderDir(dirPath);
-
-    // TODO: Remove this once it is working for one file
-    fileNames = fileNames.filter((name) => name === "05_14.csv");
+    const fileNames = getFileNamesUnderDir(dirPath);
 
     for (const fileName of fileNames) {
+      console.log("------------------------------");
+      console.log(`Processing file: ${fileName}`);
+
       const records = (await parseCSV(
         dirPath,
         fileName,
@@ -31,13 +33,9 @@ const processGasolineData = async () => {
       const dataRecords =
         filteredRecords.length > 0 ? filteredRecords : records;
 
-      const mappedRecords = formatGasolineEmissions(dataRecords);
+      const processedRecords = processGasolineRecords(dataRecords);
 
-      // eslint-disable-next-line no-unused-vars
-      const uniqueRecords = getUniqueYearModelMakes(
-        mappedRecords,
-      ) as unknown as GasolineEmissions[];
-
+      gasEmissionsData.push(...processedRecords);
     }
   } catch (error) {
     const baseMsg: string = `Exception while processing gasoline data: `;
@@ -49,6 +47,17 @@ const processGasolineData = async () => {
 
     console.log(errorMsg);
   }
+
+  return gasEmissionsData;
 };
 
-processGasolineData();
+// Example invocation
+// TODO: To be called by sql file to insert into db
+processGasolineData()
+  // eslint-disable-next-line no-unused-vars
+  .then((records) => {
+    console.log("Do something with the records");
+  })
+  .catch((error) => {
+    console.log(`Error occurred while processing gasoline data: ${error}`);
+  });
