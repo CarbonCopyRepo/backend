@@ -28,7 +28,7 @@ export interface EVEmissions {
   vehicle_type: string;
   "City (kWh/100 km)": number;
   "Highway (kWh/100 km)": number;
-  kwh_per_100_km: number;
+  energy_per_100_km: number;
   "City (Le/100 km)": number;
   "Highway (Le/100 km)": number;
   "Combined (Le/100 km)": number;

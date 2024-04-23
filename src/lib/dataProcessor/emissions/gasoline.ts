@@ -101,9 +101,8 @@ export const processGasolineData = async () => {
 // Example invocation
 // TODO: To be called by sql file to insert into db
 processGasolineData()
-  // eslint-disable-next-line no-unused-vars
   .then((records) => {
-    console.log("Do something with the records");
+    console.log(records.slice(0, 10));
   })
   .catch((error) => {
     console.log(`Error occurred while processing gasoline data: ${error}`);
