@@ -7,6 +7,8 @@
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
 ARG NODE_VERSION=20.9.0
+ARG GEOCODE_API_KEY
+ARG HERE_API_KEY
 
 ################################################################################
 # Use node image for base image for all stages.
@@ -53,6 +55,10 @@ FROM base as final
 
 # Use production node environment by default.
 ENV NODE_ENV production
+
+# Receive the api keys
+ENV GEOCODE_API_KEY=${GEOCODE_API_KEY}
+ENV HERE_API_KEY=${HERE_API_KEY}
 
 # Run the application as a non-root user.
 USER node
