@@ -11,5 +11,5 @@ describe("setupConnecter", () => {
   // });
   test("DB connection placeholder", () => {
     expect(1 + 1).toBe(2);
-  })
+  });
 });
