@@ -98,6 +98,9 @@ export const makePostRequest = async ({
   let response: AxiosResponse<any, any> | null = null;
 
   try {
+    if (!body || Object.keys(body).length === 0) {
+      throw new Error("makePostRequest: No POST body received");
+    }
     if (!body || Object.keys(body).length === 0)
       throw new Error("No POST body received");
     if (!baseURL) throw new Error("No URL received");
@@ -114,6 +117,8 @@ export const makePostRequest = async ({
     clientResponse.statusCode = errorResponse.status;
     clientResponse.data = [];
     clientResponse.error = errorResponse.message;
+
+    throw new Error(errorResponse.message);
   }
 
   return Promise.resolve(clientResponse);
