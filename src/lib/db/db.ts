@@ -1,25 +1,28 @@
-import pg from "pg";
-import { Connector, IpAddressTypes } from "@google-cloud/cloud-sql-connector";
-const { Pool } = pg;
-import { GoogleAuth } from "google-auth-library";
+import { Connector } from "@google-cloud/cloud-sql-connector";
 
-export const setupConnector = async () => {
-  const connector = new Connector({
-    auth: new GoogleAuth({
-      scopes: ["https://www.googleapis.com/auth/sqlservice.admin"],
-      projectId: process.env.PROJECT_ID,
-      keyFilename: "googleAuthKey.json",
-    }),
-  });
+import { Pool } from "pg";
 
-  const options = await connector.getOptions({
-    instanceConnectionName: process.env.INSTANCE_CONNECTION_NAME ?? "",
-    ipType: IpAddressTypes.PUBLIC,
-  });
+import { CLOUD_SQL } from "../constants";
+import { getConnectionOptions } from "./db.utils";
+
+export async function connect() {
+  const { POOL_MIN, POOL_MAX } = CLOUD_SQL;
+
+  const connector = new Connector();
+
+  const connOptions = await connector.getOptions(getConnectionOptions());
 
   const pool = new Pool({
-    ...options,
+    ...connOptions,
+    database: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    min: POOL_MIN,
+    max: POOL_MAX,
   });
 
-  return pool;
-};
+  return {
+    query: (text: string, params?: any) => pool.query(text, params),
+    close: () => pool.end(),
+  };
+}

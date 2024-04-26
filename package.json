@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --maxWorkers=1",
     "build": "npx tsc",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon -e ts --exec ts-node src/index.ts",
     "lint": "eslint **/*.ts --fix",
     "start": "node dist/src/index.js",
     "prepare": "node -e \"if (process.env.NODE_ENV !== 'production'){process.exit(1)} \" || husky install"

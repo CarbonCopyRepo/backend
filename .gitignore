@@ -5,3 +5,4 @@ coverage/
 .terraform/
 googleServiceAuth.json
 googleAuthKey.json
+cloud-sql-sa.json

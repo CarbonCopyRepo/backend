@@ -17,7 +17,6 @@ export const GEOCODING_ERROR_TYPES = {
  *
  * LIMIT: defaults to 20 records currently. Can be passed from frontend if needed.
  */
-
 export const HERE_API_CONFIG = {
   BASE_URL: "https://browse.search.hereapi.com/v1",
   ENDPOINT: "/browse",
@@ -28,4 +27,9 @@ export const HERE_API_CONFIG = {
 export const NUMBERS = {
   MILES_TO_KM: 1.60934,
   AVG_CO2_EMISSIONS_IN_GRAMS_PER_KWH: 527,
+};
+
+export const CLOUD_SQL = {
+  POOL_MIN: 2,
+  POOL_MAX: 5,
 };
