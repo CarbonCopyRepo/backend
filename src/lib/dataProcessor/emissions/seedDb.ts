@@ -1,7 +1,7 @@
 import {
   getAllVehiclesData,
-  getUniqueMakes,
-  processAllVehiclesMakeData,
+  prepareMakeTableData,
+  processAllVehiclesModelData,
 } from "./formatter";
 
 import {
@@ -13,10 +13,12 @@ import { connect } from "../../db/db";
 
 export const seedMakeTable = async () => {
   const allVehiclesData = await getAllVehiclesData();
-  const allUniqueMakes = getUniqueMakes(allVehiclesData);
-  const allUniqueMakesStr = JSON.stringify(allUniqueMakes);
+  const makeTableData = prepareMakeTableData(allVehiclesData);
+  const makeTableDataStr = JSON.stringify(makeTableData);
 
-  const queryStr = buildSeedMakeTableQuery(allUniqueMakesStr);
+  // console.log(makeTableData.length);
+
+  const queryStr = buildSeedMakeTableQuery(makeTableDataStr);
   // console.log(queryStr);
 
   const { query, close } = await connect();
@@ -24,7 +26,7 @@ export const seedMakeTable = async () => {
   try {
     await query(queryStr);
     console.log(
-      `${allUniqueMakes.length} unique car makes inserted successfully`,
+      `${makeTableData.length} unique car makes inserted successfully`,
     );
   } catch (error) {
     console.log(`Error while inserting unique car makes: ${error}`);
@@ -35,8 +37,11 @@ export const seedMakeTable = async () => {
 
 export const seedModelTable = async () => {
   const allVehiclesData = await getAllVehiclesData();
+  // console.log(allVehiclesData.length);
 
-  const formattedVehiclesData = processAllVehiclesMakeData(allVehiclesData);
+  const formattedVehiclesData = processAllVehiclesModelData(allVehiclesData);
+
+  // console.log(formattedVehiclesData.length);
 
   const jsonDataStr = JSON.stringify(formattedVehiclesData);
 
