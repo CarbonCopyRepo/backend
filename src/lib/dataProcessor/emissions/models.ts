@@ -1,6 +1,6 @@
 export interface GasolineEmissions {
   year: number;
-  make: string;
+  make?: string;
   model: string;
   "Vehicle class": string;
   "Engine size (L)": number;

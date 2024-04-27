@@ -18,13 +18,15 @@ const formatEVRecords = (records: EVEmissions[]): EVEmissions[] => {
   const dataRecords = [...records];
 
   return dataRecords.map((record: EVEmissions) => {
-    const { year, make, model, vehicle_type, energy_per_100_km } = record;
+    const { year, make, model, vehicle_type } = record;
+    let { energy_per_100_km } = record;
 
     // The dataset has emissions all set to 0. We are calculating it as:
     // CO2 emissions / 100km = Efficiency (i.e. energy/100km) * CO2 emissions / kWh
     // CO2 emissions / km = CO2 emissions / 100
     // Assumption: CO2 emissions / kWH in US (National avg) -> 527.1 g CO2/kWh.
     const emissions_per_km = calculateEmissionPerKm(energy_per_100_km);
+    energy_per_100_km = Math.round(energy_per_100_km);
 
     return {
       year,

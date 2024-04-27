@@ -1,5 +1,7 @@
 import { EVEmissions, GasolineEmissions } from "./models";
 import { NUMBERS } from "../../constants";
+import { processGasolineData } from "./gasoline";
+import { processEVData } from "./ev";
 
 export const getUniqueYearModelMakes = (records: any[]) => {
   const items: Set<String> = new Set();
@@ -41,6 +43,28 @@ export const convertToGramsPerMile = (
   const emissionPerMile = record.emissions_per_km / NUMBERS.MILES_TO_KM;
 
   return Math.round(emissionPerMile);
+};
+
+export const getAllVehiclesData = async () => {
+  const gasVehiclesData = await processGasolineData();
+  const evVehiclesData = await processEVData();
+
+  return [...gasVehiclesData, ...evVehiclesData];
+};
+
+export const processAllVehiclesMakeData = (
+  records: (GasolineEmissions | EVEmissions)[],
+) => {
+  const uniqueMakes = getUniqueMakes(records);
+  const onlyMakes = uniqueMakes.map((make) => make.car_make);
+
+  return records
+    .filter((vehicle) => onlyMakes.includes(vehicle.make))
+    .map((vehicle) => {
+      const item = { ...vehicle, car_make: vehicle.make };
+      delete item.make;
+      return item;
+    });
 };
 
 const trimAndCapitalizeEachToken = (input: string) => {
