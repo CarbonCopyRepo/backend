@@ -41,17 +41,17 @@ resource "kubernetes_deployment" "cc-backend" {
             value = var.connection_name
           }
 
-          env = {
+          env {
             name = "DB_NAME"
             value = var.db_name
           }
 
-          env = {
+          env {
             name = "DB_USER"
             value = var.db_user
           }
 
-          env = {
+          env {
             name = "DB_PASSWORD"
             value = var.db_password
           }
