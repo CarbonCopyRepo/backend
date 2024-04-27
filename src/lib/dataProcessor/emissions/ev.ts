@@ -85,12 +85,3 @@ export const processEVData = async () => {
 
   return evEmissionsData;
 };
-
-// TODO: To be called by sql file to insert into db
-processEVData()
-  .then((records) => {
-    console.log(records.slice(0, 10));
-  })
-  .catch((error) => {
-    console.log(`Error occurred while processing ev data: ${error}`);
-  });
