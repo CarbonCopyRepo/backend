@@ -7,8 +7,14 @@
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
 ARG NODE_VERSION=20.9.0
+
 ARG GEOCODE_API_KEY
 ARG HERE_API_KEY
+
+ARG CONNECTION_NAME
+ARG DB_NAME
+ARG DB_USER
+ARG DB_PASSWORD
 
 ################################################################################
 # Use node image for base image for all stages.
@@ -59,6 +65,12 @@ ENV NODE_ENV production
 # Receive the api keys
 ENV GEOCODE_API_KEY=${GEOCODE_API_KEY}
 ENV HERE_API_KEY=${HERE_API_KEY}
+
+# Define other environment variables
+ENV CONNECTION_NAME=${CONNECTION_NAME}
+ENV DB_NAME=${DB_NAME}
+ENV DB_USER=${DB_USER}
+ENV DB_PASSWORD=${DB_PASSWORD}
 
 # Run the application as a non-root user.
 USER node
