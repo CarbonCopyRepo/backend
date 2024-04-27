@@ -9,6 +9,7 @@ import userRouter from "../../user/routes";
 import csRouter from "../../charging-stations/routes";
 import storageRouter from "../../storage/routes";
 import emissionsRouter from "../../emissions/routes";
+import seedDataRouter from "../../seed-data/routes";
 
 // Singleton that stores the express server instance that
 // can be used throughout the entire application
@@ -25,11 +26,13 @@ export const getExpressServerInstance = (): Express => {
     apiRouter.use("/users", userRouter);
     apiRouter.use("/storage", storageRouter);
     apiRouter.use("/stations", csRouter);
+    apiRouter.use("/seedData", seedDataRouter);
     apiRouter.use("/emissions", emissionsRouter);
 
     // Make all routes available under the root /api prefix
     app.use("/api", apiRouter);
     app.use("/api", csRouter);
+    app.use("/api", seedDataRouter);
     app.use("/api", emissionsRouter);
 
     // Redirect to "/api", if the app gets a request on "/"
