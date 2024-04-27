@@ -64,7 +64,7 @@ jobs:
           --build-arg DB_NAME=${{ env.DB_NAME }} \
           --build-arg DB_USER=${{ env.DB_USER }} \
           --build-arg DB_PASSWORD=${{ env.DB_PASSWORD }} \
-          . -t gcr.io/${{ env.GCP_PROJECT_ID }}/$IMAGE_NAME
+          -t gcr.io/${{ env.GCP_PROJECT_ID }}/$IMAGE_NAME .
 
       - name: Push the docker image to Container Registry (GCR)
         run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/$IMAGE_NAME:latest
