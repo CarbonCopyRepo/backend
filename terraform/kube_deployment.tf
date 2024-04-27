@@ -36,6 +36,26 @@ resource "kubernetes_deployment" "cc-backend" {
             value = var.here_api_key
           }
 
+          env {
+            name = "CONNECTION_NAME"
+            value = var.connection_name
+          }
+
+          env = {
+            name = "DB_NAME"
+            value = var.db_name
+          }
+
+          env = {
+            name = "DB_USER"
+            value = var.db_user
+          }
+
+          env = {
+            name = "DB_PASSWORD"
+            value = var.db_password
+          }
+
           port {
             container_port = 3000
           }

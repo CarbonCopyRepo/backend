@@ -32,6 +32,10 @@ jobs:
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       GEOCODE_API_KEY: ${{ secrets.GEOCODE_API_KEY }}
       HERE_API_KEY: ${{ secrets.HERE_API_KEY }}
+      CONNECTION_NAME: ${{ secrets.CONNECTION_NAME }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
@@ -53,10 +57,17 @@ jobs:
           gcloud auth configure-docker --quiet
 
       - name: Build the docker image
-        run: docker build --build-arg GEOCODE_API_KEY=${{ secrets.GEOCODE_API_KEY }} --build-arg HERE_API_KEY=${{ secrets.HERE_API_KEY }} . -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/$IMAGE_NAME
+        run: docker build \
+          --build-arg GEOCODE_API_KEY=${{ env.GEOCODE_API_KEY }} \
+          --build-arg HERE_API_KEY=${{ env.HERE_API_KEY }} \
+          --build-arg CONNECTION_NAME=${{ env.CONNECTION_NAME }} \
+          --build-arg DB_NAME=${{ env.DB_NAME }} \
+          --build-arg DB_USER=${{ env.DB_USER }} \
+          --build-arg DB_PASSWORD=${{ env.DB_PASSWORD }} \
+          . -t gcr.io/${{ env.GCP_PROJECT_ID }}/$IMAGE_NAME
 
       - name: Push the docker image to Container Registry (GCR)
-        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/$IMAGE_NAME:latest
+        run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/$IMAGE_NAME:latest
 
   Deploy_to_GKE_on_GCP:
     name: Provision GKE resources on GCP with Terraform
@@ -67,6 +78,10 @@ jobs:
       TF_VAR_gcp_terraform_sa: ${{ secrets.GCP_TERRAFORM_SA }}
       TF_VAR_geocode_api_key: ${{ secrets.GEOCODE_API_KEY }}
       TF_VAR_here_api_key: ${{ secrets.HERE_API_KEY }}
+      TF_VAR_connection_name: ${{ secrets.CONNECTION_NAME }}
+      TF_VAR_db_name: ${{ secrets.DB_NAME }}
+      TF_VAR_db_user: ${{ secrets.DB_USER }}
+      TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout

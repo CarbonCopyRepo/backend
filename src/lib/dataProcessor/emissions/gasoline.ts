@@ -97,13 +97,3 @@ export const processGasolineData = async () => {
 
   return gasEmissionsData;
 };
-
-// Example invocation
-// TODO: To be called by sql file to insert into db
-processGasolineData()
-  .then((records) => {
-    console.log(records.slice(0, 10));
-  })
-  .catch((error) => {
-    console.log(`Error occurred while processing gasoline data: ${error}`);
-  });
