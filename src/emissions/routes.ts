@@ -1,18 +1,14 @@
 import { Request, Response, Router } from "express";
-import { connect } from "../lib/db/db";
+import { seedMakeTable } from "../lib/dataProcessor/emissions/seedDb";
 
 const emissionsRouter = Router();
 
-emissionsRouter.get("/", async (req: Request, res: Response) => {
-  const { query, close } = await connect();
-
+// INFO: Do not execute this!! Table is already seeded
+emissionsRouter.get("/seedMakeTable", async (req: Request, res: Response) => {
   try {
-    const dbResponse = await query("SELECT NOW()");
-    console.log(dbResponse.rows);
-  } catch (err) {
-    console.log(`Error in query execution: ${err}`);
-  } finally {
-    await close();
+    await seedMakeTable();
+  } catch (error) {
+    console.log(error);
   }
 
   return res.status(200).json({ message: "Hello from emissions router!" });
