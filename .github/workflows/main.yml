@@ -60,7 +60,7 @@ jobs:
         run: docker build --build-arg GEOCODE_API_KEY=${{ env.GEOCODE_API_KEY }} --build-arg HERE_API_KEY=${{ env.HERE_API_KEY }} --build-arg CONNECTION_NAME=${{ env.CONNECTION_NAME }} --build-arg DB_NAME=${{ env.DB_NAME }} --build-arg DB_USER=${{ env.DB_USER }} --build-arg DB_PASSWORD=${{ env.DB_PASSWORD }}  . -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/$IMAGE_NAME
 
       - name: Push the docker image to Container Registry (GCR)
-        run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/$IMAGE_NAME:latest
+        run: docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/$IMAGE_NAME:latest
 
   Deploy_to_GKE_on_GCP:
     name: Provision GKE resources on GCP with Terraform
