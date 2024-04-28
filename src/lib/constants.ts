@@ -29,6 +29,8 @@ export const HERE_API_CONFIG = {
 export const NUMBERS = {
   MILES_TO_KM: 1.60934,
   AVG_CO2_EMISSIONS_IN_GRAMS_PER_KWH: 527,
+  GASOLINE_BTU_PER_GALLON: 114000,
+  EV_BTU_PER_KWH: 3412,
 };
 
 export const VEHICLE_TYPES: StringObject = {
