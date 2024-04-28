@@ -1,5 +1,5 @@
 import {
-  getAllVehiclesData,
+  formatVehiclesData,
   prepareMakeTableData,
   processAllVehiclesModelData,
 } from "./formatter";
@@ -10,24 +10,30 @@ import {
 } from "./queries/seed.queries";
 
 import { connect } from "../../db/db";
+import { processGasolineData } from "./gasoline";
+import { processEVData } from "./ev";
 
 export const seedMakeTable = async () => {
-  const allVehiclesData = await getAllVehiclesData();
-  const makeTableData = prepareMakeTableData(allVehiclesData);
-  const makeTableDataStr = JSON.stringify(makeTableData);
+  const gasVehiclesData = await processGasolineData();
+  const evVehiclesData = await processEVData();
 
-  // console.log(makeTableData.length);
+  const processedGasVehiclesData = formatVehiclesData(gasVehiclesData);
+  const processedEVVehiclesData = formatVehiclesData(evVehiclesData);
 
-  const queryStr = buildSeedMakeTableQuery(makeTableDataStr);
+  const gasMakes = prepareMakeTableData(processedGasVehiclesData);
+  const evMakes = prepareMakeTableData(processedEVVehiclesData);
+
+  const allMakes = [...gasMakes, ...evMakes];
+  const allMakesStr = JSON.stringify(allMakes);
+
+  const queryStr = buildSeedMakeTableQuery(allMakesStr);
   // console.log(queryStr);
 
   const { query, close } = await connect();
 
   try {
     await query(queryStr);
-    console.log(
-      `${makeTableData.length} unique car makes inserted successfully`,
-    );
+    console.log(`${allMakes.length} unique car makes inserted successfully`);
   } catch (error) {
     console.log(`Error while inserting unique car makes: ${error}`);
   } finally {
@@ -36,12 +42,17 @@ export const seedMakeTable = async () => {
 };
 
 export const seedModelTable = async () => {
-  const allVehiclesData = await getAllVehiclesData();
-  // console.log(allVehiclesData.length);
+  const gasVehicles = await processGasolineData();
+  const evVehicles = await processEVData();
 
-  const formattedVehiclesData = processAllVehiclesModelData(allVehiclesData);
+  const processedGasVehiclesData = formatVehiclesData(gasVehicles);
+  const processedEVVehiclesData = formatVehiclesData(evVehicles);
 
-  // console.log(formattedVehiclesData.length);
+  const gasModelsInfo = processAllVehiclesModelData(processedGasVehiclesData);
+  const evModelsInfo = processAllVehiclesModelData(processedEVVehiclesData);
+
+  const formattedVehiclesData = [...gasModelsInfo, ...evModelsInfo];
+  console.log(formattedVehiclesData.length);
 
   const jsonDataStr = JSON.stringify(formattedVehiclesData);
 
