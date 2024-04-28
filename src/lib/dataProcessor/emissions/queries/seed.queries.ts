@@ -5,8 +5,11 @@ export const buildSeedMakeTableQuery = (jsonStr: string) => {
         VALUES 
         ('${jsonStr}'::json)
     )
-    INSERT INTO make (car_make)
-    SELECT jsonb_object->>'car_make' FROM json_array_elements(
+    INSERT INTO make (car_make, vehicle_type)
+    SELECT 
+        jsonb_object->>'car_make',
+        jsonb_object->>'vehicle_type'
+    FROM json_array_elements(
         (SELECT jsonStr FROM data))
     AS jsonb_object;
   `;

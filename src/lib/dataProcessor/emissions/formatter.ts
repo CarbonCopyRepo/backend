@@ -1,7 +1,5 @@
 import { EVEmissions, GasolineEmissions } from "./models";
 import { NUMBERS } from "../../constants";
-import { processGasolineData } from "./gasoline";
-import { processEVData } from "./ev";
 
 export const getUniqueYearModelMakes = (records: any[]) => {
   const items: Set<String> = new Set();
@@ -20,21 +18,34 @@ export const getUniqueYearModelMakes = (records: any[]) => {
   return uniqueRecords;
 };
 
-export const getUniqueMakes = (records: any[]) => {
+export const getUniqueMakesAndVehicleTypes = (records: any[]) => {
   const items: Set<String> = new Set();
 
-  const uniqueMakes: any[] = [];
+  const uniqueMakesAndVehicleTypes: any[] = [];
 
   for (const record of records) {
-    const currentMake: string = trimAndCapitalizeEachToken(record.make);
+    const currentMake: string | undefined = record.make;
+    const currentVehicleType: string | undefined = record.vehicle_type;
 
-    if (!items.has(currentMake)) {
-      items.add(currentMake);
-      uniqueMakes.push({ car_make: currentMake });
+    const key = `${currentMake}_${currentVehicleType}`;
+
+    if (currentMake && currentVehicleType && !items.has(key)) {
+      items.add(key);
+
+      uniqueMakesAndVehicleTypes.push({
+        car_make: currentMake,
+        vehicle_type: currentVehicleType,
+      });
     }
   }
 
-  return uniqueMakes;
+  return uniqueMakesAndVehicleTypes;
+};
+
+export const prepareMakeTableData = (
+  records: (GasolineEmissions | EVEmissions)[],
+) => {
+  return getUniqueMakesAndVehicleTypes(records);
 };
 
 export const convertToGramsPerMile = (
@@ -45,38 +56,50 @@ export const convertToGramsPerMile = (
   return Math.round(emissionPerMile);
 };
 
-export const getAllVehiclesData = async () => {
-  const gasVehiclesData = await processGasolineData();
-  const evVehiclesData = await processEVData();
-
-  return [...gasVehiclesData, ...evVehiclesData];
-};
-
-export const processAllVehiclesMakeData = (
+export const processAllVehiclesModelData = (
   records: (GasolineEmissions | EVEmissions)[],
 ) => {
-  const uniqueMakes = getUniqueMakes(records);
-  const onlyMakes = uniqueMakes.map((make) => make.car_make);
+  const uniqueMakesAndVehicleTypes = getUniqueMakesAndVehicleTypes(records);
 
-  return records
-    .filter((vehicle) => onlyMakes.includes(vehicle.make))
-    .map((vehicle) => {
-      const item = { ...vehicle, car_make: vehicle.make };
-      delete item.make;
-      return item;
+  const matchingModelInfoRecords = records.filter((record) => {
+    return uniqueMakesAndVehicleTypes.some((item) => {
+      return (
+        item.car_make === record.make &&
+        item.vehicle_type === record.vehicle_type
+      );
     });
-};
-
-const trimAndCapitalizeEachToken = (input: string) => {
-  const tokens = input.trim().split(" ");
-  const trimmedTokens = tokens.map((token) => token.trim());
-
-  const capitalizedTokens = trimmedTokens.map((token) => {
-    const firstChar = token.charAt(0);
-    const remaining = token.substring(1);
-
-    return firstChar.toUpperCase() + remaining;
   });
 
-  return capitalizedTokens.join(" ");
+  return matchingModelInfoRecords.map((vehicle) => {
+    const item = { ...vehicle, car_make: vehicle.make };
+    delete item.make;
+    return item;
+  });
+};
+
+export const formatVehiclesData = (records: any[]) => {
+  return records.map((record) => {
+    return {
+      make: trimAndCapitalizeEachToken(record.make),
+      ...record,
+    };
+  });
+};
+
+const trimAndCapitalizeEachToken = (input: string | undefined) => {
+  if (input) {
+    const tokens = input.trim().split(" ");
+    const trimmedTokens = tokens.map((token) => token.trim());
+
+    const capitalizedTokens = trimmedTokens.map((token) => {
+      const firstChar = token.charAt(0);
+      const remaining = token.substring(1);
+
+      return firstChar.toUpperCase() + remaining;
+    });
+
+    return capitalizedTokens.join(" ");
+  }
+
+  return input;
 };
