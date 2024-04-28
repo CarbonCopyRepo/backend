@@ -1,3 +1,5 @@
+import { StringObject } from "./apiClient/apiClient.types";
+
 export const GEOCODE_CONFIG = {
   BASE_URL: "https://api.geoapify.com/v1",
   ENDPOINT: "/geocode/search",
@@ -27,6 +29,12 @@ export const HERE_API_CONFIG = {
 export const NUMBERS = {
   MILES_TO_KM: 1.60934,
   AVG_CO2_EMISSIONS_IN_GRAMS_PER_KWH: 527,
+};
+
+export const VEHICLE_TYPES: StringObject = {
+  REGULAR_GASOLINE: "X",
+  PREMIUM_GASOLINE: "Z",
+  DIESEL: "D",
 };
 
 export const CLOUD_SQL = {
