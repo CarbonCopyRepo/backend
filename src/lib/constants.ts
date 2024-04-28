@@ -35,6 +35,7 @@ export const VEHICLE_TYPES: StringObject = {
   REGULAR_GASOLINE: "X",
   PREMIUM_GASOLINE: "Z",
   DIESEL: "D",
+  EV: "B",
 };
 
 export const CLOUD_SQL = {
