@@ -12,6 +12,7 @@ import emissionsRouter from "../../emissions/routes";
 import seedDataRouter from "../../seed-data/routes";
 import vehiclesRouter from "../../vehicles/routes";
 import fuelConsumptionRouter from "../../fuel-consumption/routes";
+import cors from "cors";
 
 // Singleton that stores the express server instance that
 // can be used throughout the entire application
@@ -21,6 +22,7 @@ export const getExpressServerInstance = (): Express => {
   if (!app) {
     app = express();
 
+    app.use(cors());
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
