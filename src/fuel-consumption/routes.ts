@@ -1,8 +1,10 @@
 import { Router, Request, Response } from "express";
-import { isValidVehicleType } from "../vehicles/vehicles.utils";
 import { connect } from "../lib/db/db";
-import { buildAvgYearlyConsumptionQuery } from "./queries/fuel-consumption.queries";
+
+import { isValidVehicleType } from "../vehicles/vehicles.utils";
 import { convertToBTUs } from "./fuel-consumption.utils";
+
+import { buildAvgYearlyConsumptionQuery } from "./queries/fuel-consumption.queries";
 
 const fuelConsumptionRouter = Router();
 
