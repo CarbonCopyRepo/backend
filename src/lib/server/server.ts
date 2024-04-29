@@ -11,6 +11,7 @@ import storageRouter from "../../storage/routes";
 import emissionsRouter from "../../emissions/routes";
 import seedDataRouter from "../../seed-data/routes";
 import vehiclesRouter from "../../vehicles/routes";
+import fuelConsumptionRouter from "../../fuel-consumption/routes";
 
 // Singleton that stores the express server instance that
 // can be used throughout the entire application
@@ -30,6 +31,7 @@ export const getExpressServerInstance = (): Express => {
     apiRouter.use("/seedData", seedDataRouter);
     apiRouter.use("/emissions", emissionsRouter);
     apiRouter.use("/vehicles", vehiclesRouter);
+    apiRouter.use("/consumption", fuelConsumptionRouter);
 
     // Make all routes available under the root /api prefix
     app.use("/api", apiRouter);
@@ -37,6 +39,7 @@ export const getExpressServerInstance = (): Express => {
     app.use("/api", seedDataRouter);
     app.use("/api", emissionsRouter);
     app.use("/api", vehiclesRouter);
+    app.use("/api", fuelConsumptionRouter);
 
     // Redirect to "/api", if the app gets a request on "/"
     app.get("/", (req: Request, res: Response) => {

@@ -1,11 +1,13 @@
 import { Request, Response, Router } from "express";
+
 import { isValidVehicleType } from "../vehicles/vehicles.utils";
+
 import {
   buildAverageEmissionsForMakeAndModelYearlyQuery,
   buildAverageEmissionsYearlyQuery,
 } from "./queries/emissions.queries";
+
 import { connect } from "../lib/db/db";
-import { VEHICLE_TYPES } from "../lib/constants";
 
 const emissionsRouter = Router();
 
@@ -20,12 +22,8 @@ emissionsRouter.get("/yearly", async (req: Request, res: Response) => {
     return res.status(400).json({ data: [], error: errorMsg });
   }
 
-  const yearlyGasEmissionsQuery = buildAverageEmissionsYearlyQuery(
+  const yearlyEmissionsQuery = buildAverageEmissionsYearlyQuery(
     vehicleType as string,
-  );
-
-  const yearlyEvEmissionsQuery = buildAverageEmissionsYearlyQuery(
-    VEHICLE_TYPES.EV,
   );
 
   // console.log(yearlyEmissionsQuery);
@@ -33,25 +31,16 @@ emissionsRouter.get("/yearly", async (req: Request, res: Response) => {
   const { query, close } = await connect();
 
   try {
-    const gasVehiclesDbResponse = await query(yearlyGasEmissionsQuery);
-    const evVehiclesDbResponse = await query(yearlyEvEmissionsQuery);
-
-    const totalRows =
-      gasVehiclesDbResponse.rows.length + evVehiclesDbResponse.rows.length;
+    const dbResponse = await query(yearlyEmissionsQuery);
 
     console.log(
-      `Retrieved ${totalRows} rows of yearly emission values for vehicle_type: ${vehicleType} and vehicle_type: B`,
+      `Retrieved ${dbResponse.rows.length} rows of yearly emission values for vehicle_type: ${vehicleType}`,
     );
 
-    const data = gasVehiclesDbResponse.rows.map((row) => {
-      const evRecord = evVehiclesDbResponse.rows.filter(
-        (ev) => ev.year === row.year,
-      );
-
+    const data = dbResponse.rows.map((row) => {
       return {
         year: row.year,
-        gas_emissions: row.avg_emission_in_grams * miles,
-        ev_emissions: evRecord[0].avg_emission_in_grams * miles,
+        emissions: row.avg_emission_in_grams * miles,
       };
     });
 
