@@ -3,6 +3,7 @@
 //      (i.e.) CORS, middlewares, routes etc.
 
 import express, { Express, Request, Response } from "express";
+import cors from "cors";
 
 import apiRouter from "../../routes";
 import userRouter from "../../user/routes";
@@ -21,8 +22,11 @@ export const getExpressServerInstance = (): Express => {
   if (!app) {
     app = express();
 
+    const corsConfig = { origin: "*" };
+
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+    app.use(cors(corsConfig));
 
     // Initialize the individual routers as per component
     apiRouter.use("/users", userRouter);
